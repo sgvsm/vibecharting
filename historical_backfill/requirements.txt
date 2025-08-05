@@ -1,0 +1,10 @@
+# Python dependencies for historical data backfill script
+
+# Database connectivity
+pg8000==1.31.4
+
+# HTTP requests for CoinGecko API
+requests==2.32.4
+
+# Date/time handling (usually included but explicit for clarity)
+python-dateutil==2.8.2

@@ -1,0 +1,1 @@
+# Utils package for trend analysis Lambda function 

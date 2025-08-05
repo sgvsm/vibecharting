@@ -1,0 +1,97 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# AWS
+.aws/
+
+# Secrets and Credentials
+secrets/
+.env
+*.pem
+*.key
+
+# Logs
+*.log
+logs/
+log/
+
+# Database
+*.sqlite3
+*.db
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Lambda Deployment Packages
+*.zip
+lambda_functions/*/data_ingestion_lambda_*.zip
+lambda_functions/*/trend_analysis_lambda_*.zip
+lambda_functions/*/trend_analysis.zip
+
+# Test and Debug Files
+test_*.py
+debug_*.py
+sample_*.py
+*_test.py
+*_debug.py
+*_sample.py
+pool_test_results*.json
+historical_price_seed_hardcoded.sql
+
+# Temporary Files
+*.tmp
+*.temp
+*.bak
+*.backup
+migrations.tar.gz
+
+# Sensitive Documentation (contains API keys, passwords, etc.)
+docs/15-complete-migration-execution-guide.md
+docs/Tokens.txt
+docs/Tokens2.txt
+
+# Python Package Dependencies (should be installed during deployment)
+lambda_functions/*/pg8000/
+lambda_functions/*/requests/
+lambda_functions/*/numpy/
+lambda_functions/*/scipy/
+lambda_functions/*/dateutil/
+lambda_functions/*/certifi/
+lambda_functions/*/charset_normalizer/
+lambda_functions/*/idna/
+lambda_functions/*/scramp/
+lambda_functions/*/asn1crypto/
+lambda_functions/*/bin/
+lambda_functions/*/six.py
+lambda_functions/*/*.dist-info/
