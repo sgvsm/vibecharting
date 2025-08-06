@@ -1,8 +1,8 @@
-# Crypto Trend Analysis Chatbot - Backend Infrastructure
+# Crypto Trend Analysis Chatbot - Backend & Frontend
 
 ## 🚀 Quick Start
 
-This repository contains the backend infrastructure for the Crypto Trend Analysis Chatbot MVP, a proof-of-concept system that analyzes cryptocurrency price trends and provides natural language query responses about market conditions.
+This repository contains the backend infrastructure & Frontend Code for the Crypto Trend Analysis Chatbot MVP, a proof-of-concept system that analyzes cryptocurrency price trends and provides natural language query responses about market conditions.
 
 **👉 New to the project?** Start with the [Complete Setup Guide](docs/SETUP_GUIDE.md) for step-by-step deployment instructions.
 
@@ -107,14 +107,6 @@ The system supports analysis and queries for:
 3. **Deploy Lambda Functions**: Follow [Lambda Setup Guide](docs/07-lambda-functions-setup.md)
 4. **Test API**: Use [API Reference](docs/API_REFERENCE.md) for testing
 
-## 📊 Expected Costs
-
-**Estimated Monthly Cost: ~$25-50**
-- RDS (db.t3.micro): ~$15
-- Lambda Functions: ~$5
-- API Gateway: ~$2
-- CloudWatch/Monitoring: ~$3
-- Additional services: ~$5-20
 
 ## 🔍 API Quick Start
 
