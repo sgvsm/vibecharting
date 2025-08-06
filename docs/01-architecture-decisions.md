@@ -37,9 +37,9 @@
 - **Cost Optimization**: Right-size memory/timeout per function
 - **Development**: Parallel development and easier debugging
 
-## 3. Data Source: CoinMarketCap API
+## 3. Data Source: Coingecko API
 
-**Decision**: Use CoinMarketCap API as the primary data source.
+**Decision**: Use Coingecko API as the primary data source.
 
 **Rationale**:
 - **Free Tier**: 10,000 calls/month sufficient for MVP (hourly updates for 50 tokens)
@@ -94,14 +94,7 @@
 - **Data Quality**: Better data availability and accuracy
 - **API Efficiency**: Single API call can fetch multiple token data
 
-**Specific Tokens** (to be confirmed):
-```
-BTC, ETH, BNB, XRP, ADA, SOL, DOGE, DOT, AVAX, MATIC, 
-LTC, UNI, LINK, ATOM, FTT, NEAR, ALGO, XLM, VET, ICP,
-FIL, HBAR, SAND, MANA, AXS, THETA, XTZ, EOS, AAVE, BSV,
-CAKE, GRT, SNX, KSM, ENJ, COMP, YFI, SUSHI, BAT, ZEC,
-1INCH, REN, LRC, ANKR, NKN, STORJ, KEEP, NU, BAND, ZRX
-```
+
 
 ## 8. Data Retention Policy
 

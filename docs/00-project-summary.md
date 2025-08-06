@@ -52,15 +52,6 @@ Frontend (AWS Amplify) → API Gateway → Query Processor Lambda ↔ PostgreSQL
 - **Scheduling**: EventBridge for daily data collection and analysis
 - **Frontend**: AWS Amplify with built-in CI/CD
 
-## 📊 Expected Costs
-
-**Estimated Monthly Cost: ~$25-50**
-- RDS (db.t3.micro): ~$15
-- Lambda Functions: ~$5
-- API Gateway: ~$2
-- CloudWatch/Monitoring: ~$3
-- Additional services: ~$5-20
-
 ## ✅ Key Planning Decisions Made
 
 ### 1. **Frontend Hosting Decision**
@@ -124,66 +115,6 @@ Frontend (AWS Amplify) → API Gateway → Query Processor Lambda ↔ PostgreSQL
 - ✅ Lambda function deployment instructions
 - ✅ API specifications and usage examples
 
-### 📋 Next Steps (Implementation Phase)
-
-1. **AWS Account Setup**
-   - Configure AWS CLI with appropriate credentials
-   - Set up billing alerts ($50 monthly budget recommended)
-
-2. **Infrastructure Foundation**
-   - Follow [AWS Infrastructure Setup Guide](05-aws-infrastructure-setup.md)
-   - Create VPC, RDS instance, and basic security groups
-   - Store secrets in AWS Secrets Manager
-
-3. **Database Setup**
-   - Follow [EC2 Migration Guide](08-ec2-migration-guide.md)
-   - Run migration files from `database/migrations/`
-   - Seed cryptocurrency data for top 20-50 tokens
-   - Test database connectivity
-
-4. **CoinMarketCap API Setup**
-   - Sign up for CoinMarketCap API (free tier: 10,000 calls/month)
-   - Test API access and understand rate limits
-   - Identify CMC IDs for target cryptocurrencies
-
-5. **Lambda Deployment**
-   - Follow [Lambda Functions Setup Guide](07-lambda-functions-setup.md)
-   - Package and deploy all 3 Lambda functions
-   - Configure environment variables and IAM permissions
-   - Test with EventBridge scheduling
-
-6. **API Gateway Integration**
-   - Set up API Gateway for query processor
-   - Configure CORS and rate limiting
-   - Test end-to-end integration
-
-7. **Frontend Infrastructure**
-   - Set up AWS Amplify for frontend hosting
-   - Configure CORS and API endpoints
-   - Test full system integration
-
-8. **Monitoring & Alerting**
-   - Configure CloudWatch dashboards
-   - Set up SNS alerts for critical failures
-   - Test error notification flow
-
-## 🔍 Critical Success Criteria
-
-The MVP will be considered successful when:
-
-1. **Data Pipeline Works**: System collects price data for 50 tokens daily
-2. **Analysis Functions**: Trend and signal detection algorithms produce accurate results
-3. **Query Interface**: Users can ask natural language questions and get relevant responses
-4. **System Reliability**: >95% uptime with proper error handling
-5. **Demo Scenarios**: All planned demo queries work with real data
-
-**Demo Queries to Test:**
-- "What coins are going up?"
-- "Show me pump and dumps"
-- "Which coins bottomed out?"
-- "What's trending down today?"
-- "Most volatile cryptocurrencies"
-- "Bitcoin trends this week"
 
 ## 💡 Future Enhancement Opportunities
 
