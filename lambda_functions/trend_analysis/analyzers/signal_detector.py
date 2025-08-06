@@ -103,6 +103,9 @@ class SignalDetector:
             prices = [p['price_usd'] for p in recent_data]
             volumes = [p['volume_24h'] for p in recent_data]
             
+            # Debug volume data
+            logger.info(f"Volume data for crypto {crypto_id}: {len(volumes)} points, range: {min(volumes):.2f} - {max(volumes):.2f}")
+            
             # Split into pump window (first 12 hours) and dump window (last 12 hours)
             pump_window = prices[:12]
             dump_window = prices[12:]
@@ -125,6 +128,10 @@ class SignalDetector:
                     max_volume = max(pump_volumes)
                     volume_spike_ratio = max_volume / avg_volume if avg_volume > 0 else 1.0
                     
+                    # Debug logging
+                    logger.info(f"Pump & dump detected - Pump: {pump_percent:.2f}%, Dump: {dump_percent:.2f}%")
+                    logger.info(f"Volume analysis - Avg: {avg_volume:.2f}, Max: {max_volume:.2f}, Ratio: {volume_spike_ratio:.2f}")
+                    
                     signals.append({
                         'crypto_id': crypto_id,
                         'signal_type': 'pump_and_dump',
@@ -138,7 +145,9 @@ class SignalDetector:
                             'pump_start_price': pump_start,
                             'pump_peak_price': pump_peak,
                             'dump_end_price': dump_end,
-                            'volume_spike_ratio': volume_spike_ratio
+                            'volume_spike_ratio': volume_spike_ratio,
+                            'avg_volume': avg_volume,
+                            'max_volume': max_volume
                         }
                     })
             
@@ -225,12 +234,17 @@ class SignalDetector:
                 avg_volume = np.mean(baseline_volumes)
                 
                 if avg_volume > 0 and spike_volume > avg_volume * self.volume_spike_threshold:
+                    volume_spike_ratio = spike_volume / avg_volume
+                    
+                    # Debug logging
+                    logger.info(f"Volume anomaly detected - Spike: {spike_volume:.2f}, Avg: {avg_volume:.2f}, Ratio: {volume_spike_ratio:.2f}")
+                    
                     signals.append({
                         'crypto_id': crypto_id,
                         'signal_type': 'volume_anomaly',
                         'detected_at': datetime.now(timezone.utc),
                         'confidence': min(spike_volume / (avg_volume * 10), 1.0),
-                        'volume_spike_ratio': spike_volume / avg_volume,
+                        'volume_spike_ratio': volume_spike_ratio,
                         'metadata': {
                             'avg_volume': avg_volume,
                             'spike_volume': spike_volume,

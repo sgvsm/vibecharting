@@ -104,11 +104,75 @@ SELECT
     c.symbol,
     c.name,
     COUNT(se.id) as signal_count,
-    STRING_AGG(DISTINCT se.signal_type, ', ') as signal_types
+    STRING_AGG(DISTINCT se.signal_type::text, ', ') as signal_types
 FROM cryptocurrencies c
 LEFT JOIN signal_events se ON c.id = se.crypto_id
 WHERE se.created_at >= NOW() - INTERVAL '7 days'
 GROUP BY c.id, c.symbol, c.name
 HAVING COUNT(se.id) > 0
 ORDER BY signal_count DESC
-LIMIT 10; 
+LIMIT 10;
+
+-- ============================================================================
+-- TREND-SIGNAL CONNECTION ANALYSIS
+-- ============================================================================
+-- Shows what timeframes were analyzed around the time signals were detected
+SELECT 
+    c.symbol,
+    c.name,
+    se.signal_type,
+    se.detected_at as signal_time,
+    STRING_AGG(DISTINCT ta.timeframe::text, ', ' ORDER BY ta.timeframe::text) as analyzed_timeframes,
+    COUNT(ta.id) as trend_analyses_count,
+    ROUND(AVG(ta.confidence) * 100, 2) as avg_trend_confidence,
+    STRING_AGG(DISTINCT ta.trend_type::text, ', ' ORDER BY ta.trend_type::text) as trend_types
+FROM signal_events se
+JOIN cryptocurrencies c ON se.crypto_id = c.id
+LEFT JOIN trend_analysis ta ON (
+    se.crypto_id = ta.crypto_id 
+    AND ta.created_at BETWEEN se.created_at - INTERVAL '2 hours' 
+                           AND se.created_at + INTERVAL '2 hours'
+)
+WHERE se.created_at >= NOW() - INTERVAL '7 days'
+GROUP BY c.id, c.symbol, c.name, se.signal_type, se.detected_at
+ORDER BY se.detected_at DESC, c.symbol;
+
+-- ============================================================================
+-- TIMEFRAME ANALYSIS SUMMARY
+-- ============================================================================
+-- Shows which timeframes are most commonly used and their effectiveness
+SELECT 
+    ta.timeframe,
+    COUNT(*) as total_analyses,
+    COUNT(CASE WHEN ta.trend_type != 'sideways' THEN 1 END) as non_sideways_trends,
+    ROUND(AVG(ta.confidence) * 100, 2) as avg_confidence,
+    ROUND(AVG(ta.price_change_percent), 2) as avg_price_change,
+    ROUND(
+        COUNT(CASE WHEN ta.trend_type != 'sideways' THEN 1 END) * 100.0 / COUNT(*), 
+        2
+    ) as trend_detection_rate
+FROM trend_analysis ta
+WHERE ta.created_at >= NOW() - INTERVAL '7 days'
+GROUP BY ta.timeframe
+ORDER BY total_analyses DESC;
+
+-- ============================================================================
+-- SIGNAL-TIMEFRAME CORRELATION
+-- ============================================================================
+-- Shows which signals are detected when certain timeframes show strong trends
+SELECT 
+    se.signal_type,
+    ta.timeframe,
+    COUNT(*) as signal_count,
+    ROUND(AVG(ta.confidence) * 100, 2) as avg_trend_confidence,
+    ROUND(AVG(se.confidence) * 100, 2) as avg_signal_confidence,
+    STRING_AGG(DISTINCT ta.trend_type::text, ', ' ORDER BY ta.trend_type::text) as associated_trends
+FROM signal_events se
+JOIN trend_analysis ta ON (
+    se.crypto_id = ta.crypto_id 
+    AND ta.created_at BETWEEN se.created_at - INTERVAL '1 hour' 
+                           AND se.created_at + INTERVAL '1 hour'
+)
+WHERE se.created_at >= NOW() - INTERVAL '7 days'
+GROUP BY se.signal_type, ta.timeframe
+ORDER BY signal_count DESC, ta.timeframe; 

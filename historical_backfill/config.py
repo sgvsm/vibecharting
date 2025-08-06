@@ -23,19 +23,19 @@ class Config:
         # Use CoinGecko's On-Chain DEX API
         self.coingecko_base_url = "https://api.coingecko.com/api/v3"
         self.rate_limit_delay = 2  # seconds between API requests
-        self.days_to_fetch = 30    # 30 days of historical data
+        self.days_to_fetch = 180   # 6 months of historical data
         
         # Date range configuration (optional)
         self.start_date = os.getenv('START_DATE')  # Format: YYYY-MM-DD
         self.end_date = os.getenv('END_DATE')      # Format: YYYY-MM-DD
         self.use_date_range = bool(self.start_date and self.end_date)
         
-        # If no date range specified, calculate default (30 days ago to yesterday)
+        # If no date range specified, calculate default (6 months ago to yesterday)
         if not self.use_date_range:
             from datetime import datetime, timedelta
             yesterday = datetime.now() - timedelta(days=1)
-            thirty_days_ago = yesterday - timedelta(days=30)
-            self.calculated_start_date = thirty_days_ago.strftime('%Y-%m-%d')
+            six_months_ago = yesterday - timedelta(days=180)
+            self.calculated_start_date = six_months_ago.strftime('%Y-%m-%d')
             self.calculated_end_date = yesterday.strftime('%Y-%m-%d')
         
         # Database Configuration
@@ -68,7 +68,7 @@ class Config:
         if self.use_date_range:
             print(f"   - Date range mode: {self.start_date} to {self.end_date}")
         else:
-            print(f"   - Date range mode: {self.calculated_start_date} to {self.calculated_end_date} (30 days)")
+            print(f"   - Date range mode: {self.calculated_start_date} to {self.calculated_end_date} (180 days)")
     
     def get_db_config(self) -> Dict[str, Any]:
         """Get database configuration"""

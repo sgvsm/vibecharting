@@ -16,7 +16,7 @@ from historical_client import CoinGeckoHistoricalClient
 def print_banner():
     """Print startup banner"""
     print("=" * 60)
-    print("🏛️  HISTORICAL DATA BACKFILL - 30 DAYS")
+    print("🏛️  HISTORICAL DATA BACKFILL - 6 MONTHS")
     print("=" * 60)
     print(f"Started at: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}")
     

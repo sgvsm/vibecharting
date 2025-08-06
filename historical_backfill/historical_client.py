@@ -44,7 +44,7 @@ class CoinGeckoHistoricalClient:
             
             # API parameters
             params = {
-                'limit': self.days_to_fetch  # Default 30 days of daily data
+                'limit': self.days_to_fetch  # 180 days of daily data
             }
             
             # Add date range parameters

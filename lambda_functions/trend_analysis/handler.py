@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 def lambda_handler(event, context):
     """
     Main Lambda handler for cryptocurrency trend analysis
-    Analyzes stored price data and detects trends and signals
+    Analyzes stored price data and detects trends and signals with improved 30-day utilization
     """
     start_time = datetime.now(timezone.utc)
     logger.info(f"Trend analysis started at {start_time}")
@@ -52,6 +52,7 @@ def lambda_handler(event, context):
         total_trends_stored = 0
         total_signals_detected = 0
         processed_count = 0
+        signal_types = {}
         
         # Process each cryptocurrency
         for crypto in active_cryptos:
@@ -61,18 +62,18 @@ def lambda_handler(event, context):
                 
                 logger.info(f"Analyzing {symbol} (ID: {crypto_id})")
                 
-                # Get price data for analysis (last 30 days)
+                # Get price data for analysis (30 days for better utilization)
                 price_data = db_client.get_price_data_for_analysis(
                     crypto_id, 
                     days=30
                 )
                 
-                if len(price_data) < 7:  # Need at least 7 data points
+                if len(price_data) < 14:  # Need at least 14 data points
                     logger.warning(f"Insufficient data for {symbol}: {len(price_data)} points")
                     continue
                 
-                # Perform trend analysis for different timeframes
-                timeframes = ['24h', '7d']
+                # Perform trend analysis for improved timeframes
+                timeframes = ['7d', '14d', '30d']  # Better timeframes for 30-day data
                 for timeframe in timeframes:
                     try:
                         trend_result = trend_analyzer.analyze_trend(
@@ -84,19 +85,21 @@ def lambda_handler(event, context):
                         if trend_result:
                             db_client.store_trend_analysis(trend_result)
                             total_trends_stored += 1
-                            logger.info(f"Stored trend analysis for {symbol} ({timeframe}): {trend_result['trend_type']}")
+                            logger.info(f"Stored trend analysis for {symbol} ({timeframe}): {trend_result['trend_type']} (confidence: {trend_result['confidence']:.2f})")
                         
                     except Exception as e:
                         logger.error(f"Error analyzing trend for {symbol} ({timeframe}): {str(e)}")
                 
-                # Perform signal detection
+                # Perform signal detection with improved algorithms
                 try:
                     signals = signal_detector.detect_signals(price_data, crypto_id)
                     
                     for signal in signals:
                         db_client.store_signal_event(signal)
                         total_signals_detected += 1
-                        logger.info(f"Detected signal for {symbol}: {signal['signal_type']}")
+                        signal_type = signal['signal_type']
+                        signal_types[signal_type] = signal_types.get(signal_type, 0) + 1
+                        logger.info(f"Detected signal for {symbol}: {signal['signal_type']} (confidence: {signal['confidence']:.2f})")
                 
                 except Exception as e:
                     logger.error(f"Error detecting signals for {symbol}: {str(e)}")
@@ -120,6 +123,12 @@ def lambda_handler(event, context):
         logger.info(f"Trends stored: {total_trends_stored}")
         logger.info(f"Signals detected: {total_signals_detected}")
         
+        # Log signal breakdown
+        if signal_types:
+            logger.info("Signal breakdown:")
+            for signal_type, count in signal_types.items():
+                logger.info(f"  {signal_type}: {count}")
+        
         return {
             'statusCode': 200,
             'body': json.dumps({
@@ -127,8 +136,10 @@ def lambda_handler(event, context):
                 'processed_count': processed_count,
                 'trends_stored': total_trends_stored,
                 'signals_detected': total_signals_detected,
+                'signal_breakdown': signal_types,
                 'duration_seconds': duration,
-                'timestamp': end_time.isoformat()
+                'timestamp': end_time.isoformat(),
+                'data_utilization': '30-day optimized analysis'
             })
         }
         
