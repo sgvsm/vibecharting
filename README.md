@@ -143,15 +143,6 @@ curl -X POST https://api.vibe-charting.com/prod/query \
 - Migration from CoinMarketCap to CoinGecko
 - Enhanced trend detection patterns
 
-### 🔄 In Progress
-- Historical data implementation
-- Performance optimization
-- Enhanced monitoring and alerting
-
-### 📋 Planned
-- Additional signal detection algorithms
-- Advanced query processing
-- Frontend application development
 
 ## 🤝 Contributing
 
@@ -162,14 +153,4 @@ When contributing to this project:
 3. **Update Documentation**: Keep docs in sync with code changes
 4. **Follow Architecture**: Maintain the established patterns
 
-## 📞 Support
 
-For questions and support:
-1. Check the [Documentation Index](docs/README.md) for relevant guides
-2. Review [Troubleshooting sections](docs/SETUP_GUIDE.md#troubleshooting) in setup guides
-3. Consult [API Reference](docs/API_REFERENCE.md) for API-specific issues
-4. Check CloudWatch logs for detailed error information
-
-## 📄 License
-
-This project is part of the Crypto Trend Analysis Chatbot MVP. See individual documentation files for specific licensing information. 
